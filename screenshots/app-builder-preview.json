@@ -1,0 +1,40 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Blue Zone",
+      "hasCanvas": false,
+      "bodyTextLen": 1630,
+      "bodyTextHash": "12a621309b3df5b4223cbd2bcdf1f81b8c3c5374b9c9fc650e947606c98295c4",
+      "bodyTextPrefix": "BZ Blue Zone v0.3.0 07:47 Fri Zürich STATUS Valid until 09:00 Ar",
+      "horizontalOverflow": false,
+      "consoleErrors": [
+        "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <MatchImpl routeId=\"/\">\n      <MatchView router={{...}} match={{id:\"//\",ssr:true, ...}}>\n        <SafeFragment>\n          <SafeFragment fallback={null}>\n            <CatchBoundary getResetKey={function getResetKey} errorComponent={function AppErrorComponent} ...>\n              <SafeFragment fallback={function fallback}>\n                <MatchInnerImpl match={{id:\"//\",ssr:true, ...}}>\n                  <Lazy>\n                    <Home>\n                      <BlueZoneApp>\n                        <div className=\"mx-auto fl...\">\n                          <header>\n                          <div>\n                          <section>\n                          <div>\n                          <button>\n                          <p>\n                          <Sheet>\n                          <Sheet>\n                          <Sheet open={false} title=\"Settings\" onClose={function onClose}>\n                            <button>\n                            <div role=\"dialog\" aria-modal=\"true\" aria-label=\"Settings\" className=\"fixed bott...\">\n                              <div>\n                              <button>\n                              <h2>\n                              <label>\n                              <select>\n                              <label>\n                              <input\n                                type=\"number\"\n                                min={1}\n                                max={60}\n                                value={10}\n                                onChange={function onChange}\n                                className=\"mb-3 w-full rounded-xl border border-border bg-surface-2 px-3.5 py-3 text-[...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              <Toggle label=\"Enable not...\" checked={true} onChange={function onChange}>\n                                <label className=\"flex items...\">\n                                  <span>\n                                  <input\n                                    type=\"checkbox\"\n                                    className=\"peer sr-only\"\n                                    checked={true}\n                                    onChange={function onChange}\n-                                   style={{caret-color:\"transparent\"}}\n                                  >\n                                  ...\n                              <Toggle label=\"Treat as p...\" checked={false} onChange={function onChange}>\n                                <label className=\"flex items...\">\n                                  <span>\n                                  <input\n                                    type=\"checkbox\"\n                                    className=\"peer sr-only\"\n                                    checked={false}\n                                    onChange={function onChange}\n-                                   style={{caret-color:\"transparent\"}}\n                                  >\n                                  ...\n                              <Toggle label=\"Auto-detec...\" checked={true} onChange={function onChange}>\n                                <label className=\"flex items...\">\n                                  <span>\n                                  <input\n                                    type=\"checkbox\"\n                                    className=\"peer sr-only\"\n                                    checked={true}\n                                    onChange={function onChange}\n-                                   style={{caret-color:\"transparent\"}}\n                                  >\n                                  ...\n                              ...\n                          ...\n"
+      ],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Blue Zone",
+      "hasCanvas": false,
+      "bodyTextLen": 1640,
+      "bodyTextHash": "6e166de45d2805a3309b02cef1a09e5fd9d5694f2e3fee10284ef8e830c455e0",
+      "bodyTextPrefix": "BZ Blue Zone v0.3.0 07:47 Fri Zürich · GPS off STATUS Valid unti",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [
+    "BRAND NOTE: no custom public/og.jpg — the platform will serve the og.grok.me placeholder. Custom cards are the default for games of every kind (DOM board/word games included), whimsical apps, creative tools, and brand-forward pages — only plain utilities (converters, CRUD trackers, admin dashboards) keep the placeholder. If this app is not a plain utility, finish the brand-asset pass per /workspace/.grok/skills/og/SKILL.md."
+  ],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

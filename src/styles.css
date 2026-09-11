@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0f1a;
+  --color-surface: #121a2b;
+  --color-surface-2: #1a2438;
+  --color-fg: #e8eef8;
+  --color-muted: #8b9bb4;
+  --color-border: rgb(255 255 255 / 0.08);
+  --color-primary: #2563eb;
+  --color-primary-bright: #3b82f6;
+  --color-ok: #22c55e;
+  --color-warn: #f59e0b;
+  --color-danger: #ef4444;
+  --color-disc: #1e4fd6;
+  --color-disc-dark: #1639a8;
+  --color-disc-rim: #0f2a7a;
+  --color-disc-face: #f4f6fa;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --radius-lg: 1.125rem;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Skeuomorphic Swiss parking disc */
+.bz-disc-body {
+  background:
+    radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.2), transparent 45%),
+    linear-gradient(160deg, #2b6cff 0%, var(--color-disc) 45%, var(--color-disc-dark) 100%);
+  box-shadow:
+    0 0 0 10px var(--color-disc-rim),
+    0 0 0 14px #0a1f5c,
+    0 16px 36px rgb(0 0 0 / 0.45),
+    inset 0 2px 6px rgb(255 255 255 / 0.25),
+    inset 0 -4px 12px rgb(0 0 0 / 0.28);
+}
+
+.bz-disc-hour {
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.bz-disc-wheel {
+  background:
+    radial-gradient(circle at 40% 32%, #ffffff, var(--color-disc-face) 55%, #dbe3ef 100%);
+  box-shadow:
+    inset 0 2px 8px rgb(0 0 0 / 0.12),
+    0 2px 6px rgb(0 0 0 / 0.18);
+  transition: transform 1.35s cubic-bezier(0.22, 1.15, 0.36, 1);
+}
+
+.bz-disc-spinning {
+  animation: bz-disc-settle 1.35s cubic-bezier(0.22, 1.15, 0.36, 1);
+}
+
+.bz-disc-pointer {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 16px solid #dc2626;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+}
+
+.bz-disc-window {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 28%;
+  height: 16%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: rgb(15 23 42 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(15 23 42 / 0.12);
+}
+
+.bz-disc-hub {
+  width: 42%;
+  height: 42%;
+  background: linear-gradient(180deg, #ffffff, #e8eef5);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.12),
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 0 0 3px #c5d0de;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bz-disc-wheel {
+    transition: none;
+  }
+  .bz-disc-spinning {
+    animation: none;
+  }
+}
+
+.bz-toast {
+  z-index: 70;
+}
+
+@keyframes bz-disc-settle {
+  0% {
+    filter: brightness(1);
+  }
+  40% {
+    filter: brightness(1.08);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}

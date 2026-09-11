@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0f1a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <title>Blue Zone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --surface: #121a2b;
+      --surface-2: #1a2438;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e8eef8;
+      --muted: #8b9bb4;
+      --accent: #2563eb;
+      --accent-bright: #3b82f6;
+      --accent-soft: rgba(37, 99, 235, 0.18);
+      --ok: #22c55e;
+      --ok-soft: rgba(34, 197, 94, 0.14);
+      --warn: #f59e0b;
+      --warn-soft: rgba(245, 158, 11, 0.14);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.14);
+      --disc-blue: #1e4fd6;
+      --disc-blue-dark: #1639a8;
+      --disc-rim: #0f2a7a;
+      --radius: 18px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      max-width: 430px;
+      margin: 0 auto;
+      padding: calc(16px + var(--safe-top)) 18px calc(20px + var(--safe-bottom));
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ─── Header ─── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-mark {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 13px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+    .brand-name { font-weight: 600; font-size: 16px; letter-spacing: -0.02em; }
+    .brand-ver { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+    .icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: grid; place-items: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.15s;
+    }
+    .icon-btn:active { background: var(--surface-2); }
+
+    /* ─── Meta row (time · location · holiday) ─── */
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .chip strong { color: var(--text); font-weight: 600; }
+    .chip-holiday {
+      background: var(--ok-soft);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: var(--ok);
+    }
+    .chip-holiday strong { color: var(--ok); }
+    .chip.hidden { display: none; }
+
+    /* ─── Status ─── */
+    .status {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .status::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--status-color, var(--accent));
+    }
+    .status-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .status-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .status-sub { font-size: 13px; color: var(--muted); }
+
+    /* ─── Disc row ─── */
+    .disc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .tile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      position: relative;
+    }
+    .tile-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tile-value {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .tile-hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .info-mini {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      display: grid; place-items: center;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* ─── Timer card (active session) ─── */
+    .timer-card {
+      display: none;
+      background: linear-gradient(160deg, #152038, #121a2b);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .timer-card.active { display: block; }
+    .timer-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .timer-value {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent-bright);
+      line-height: 1.1;
+    }
+    .timer-value.warn { color: var(--warn); }
+    .timer-value.danger { color: var(--danger); }
+    .timer-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .timer-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      justify-content: center;
+    }
+
+    /* ─── Primary actions ─── */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .btn-primary {
+      background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .btn-sm {
+      padding: 10px 14px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+
+    /* ─── Sheets / overlays ─── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+
+    .sheet {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translate(-50%, 100%);
+      width: 100%;
+      max-width: 430px;
+      max-height: 88dvh;
+      background: var(--surface);
+      border-radius: 22px 22px 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      z-index: 50;
+      padding: 12px 20px calc(24px + var(--safe-bottom));
+      overflow-y: auto;
+      transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .sheet.open { transform: translate(-50%, 0); }
+    .sheet-handle {
+      width: 36px; height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      margin: 0 auto 16px;
+    }
+    .sheet-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .sheet-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: grid; place-items: center;
+    }
+
+    /* ─── Skeuomorphic parking disc ─── */
+    .disc-showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 0 12px;
+    }
+    .parking-disc {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.18), transparent 45%),
+        linear-gradient(160deg, #2b6cff 0%, var(--disc-blue) 45%, var(--disc-blue-dark) 100%);
+      box-shadow:
+        0 0 0 10px var(--disc-rim),
+        0 0 0 14px #0a1f5c,
+        0 18px 40px rgba(0, 0, 0, 0.45),
+        inset 0 2px 6px rgba(255,255,255,0.25),
+        inset 0 -4px 12px rgba(0,0,0,0.25);
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .disc-wheel {
+      width: 68%;
+      height: 68%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 32%, #fff, #f4f6fa 55%, #dbe3ef 100%);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.18);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: 0;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transition: transform 1.35s cubic-bezier(0.22, 1.15, 0.36, 1);
+    }
+    .disc-pointer {
+      position: absolute;
+      left: 50%;
+      top: -2px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 16px solid #dc2626;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.35));
+    }
+    .disc-hub {
+      width: 42%;
+      height: 42%;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #fff, #e8eef5);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 0 0 3px #c5d0de;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .disc-face { display: contents; }
+    .disc-label-top {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+    .disc-time-display {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #0f172a;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .disc-label-bot { display: none; }
+    .disc-ticks {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+    .disc-tick {
+      position: absolute;
+      left: 50%; top: 5%;
+      width: 2px; height: 8px;
+      background: rgba(255,255,255,0.45);
+      transform-origin: 50% 108px;
+      margin-left: -1px;
+    }
+    .disc-tick.major { height: 11px; width: 2.5px; background: #fff; }
+    .disc-hour {
+      position: absolute;
+      left: 50%;
+      top: 11%;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      transform-origin: 50% 86px;
+      margin-left: -8px;
+      width: 16px;
+      text-align: center;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .disc-wheel { transition: none; }
+    }
+
+    .disc-help {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      max-width: 280px;
+    }
+    .disc-help strong { color: var(--text); }
+
+    /* ─── Settings form ─── */
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .field select, .field input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      outline: none;
+    }
+    .field select:focus, .field input:focus {
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-row span { font-size: 14px; font-weight: 500; }
+    .toggle {
+      position: relative;
+      width: 44px; height: 26px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0;
+      background: var(--surface-2);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      width: 20px; height: 20px;
+      left: 2px; top: 2px;
+      background: var(--muted);
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .toggle input:checked + .toggle-slider {
+      background: var(--accent-soft);
+      border-color: rgba(59, 130, 246, 0.45);
+    }
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(18px);
+      background: var(--accent-bright);
+    }
+
+    /* ─── Rules content ─── */
+    .rules h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 14px 0 6px;
+    }
+    .rules h3:first-child { margin-top: 0; }
+    .rules p, .rules li {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .rules ul { padding-left: 18px; margin: 4px 0 8px; }
+    .rules li { margin-bottom: 3px; }
+    .rules strong { color: var(--text); font-weight: 500; }
+
+    .footer-note {
+      margin-top: auto;
+      padding-top: 12px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      opacity: 0.65;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(80px);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 60;
+      opacity: 0;
+      transition: transform 0.25s, opacity 0.25s;
+      max-width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f0f3f8;
+        --surface: #ffffff;
+        --surface-2: #eef1f6;
+        --border: rgba(0, 0, 0, 0.08);
+        --text: #0f172a;
+        --muted: #64748b;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">BZ</div>
+      <div>
+        <div class="brand-name">Blue Zone</div>
+        <div class="brand-ver" id="appVersion">v0.3.0</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button type="button" class="icon-btn" id="btnInfo" title="Rules" aria-label="Rules">ⓘ</button>
+      <button type="button" class="icon-btn" id="btnSettings" title="Settings" aria-label="Settings">⚙</button>
+    </div>
+  </header>
+
+  <!-- Meta: time · location · holiday -->
+  <div class="meta-row">
+    <div class="chip" id="chipTime"><strong id="clockTime">--:--</strong>&nbsp;<span id="clockDay">—</span></div>
+    <div class="chip" id="chipLoc"><span id="locLabel">Locating…</span></div>
+    <div class="chip chip-holiday hidden" id="chipHoliday"><strong id="holidayLabel">Holiday</strong></div>
+  </div>
+
+  <!-- Status -->
+  <section class="status" id="statusCard">
+    <div class="status-label">Status</div>
+    <div class="status-title" id="statusTitle">Checking…</div>
+    <div class="status-sub" id="statusSub"></div>
+  </section>
+
+  <!-- Disc / leave-by -->
+  <div class="disc-row">
+    <div class="tile">
+      <div class="tile-label">
+        Set disc to
+        <button type="button" class="info-mini" id="btnDiscInfo" title="How to set disc" aria-label="Disc info">i</button>
+      </div>
+      <div class="tile-value" id="discTime">—</div>
+      <div class="tile-hint" id="discHint">Next half-hour</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Leave by</div>
+      <div class="tile-value" id="leaveBy">—</div>
+      <div class="tile-hint" id="leaveHint">Max stay</div>
+    </div>
+  </div>
+
+  <!-- Active parking timer -->
+  <div class="timer-card" id="timerCard">
+    <div class="timer-label">Time remaining</div>
+    <div class="timer-value" id="timerValue">--:--</div>
+    <div class="timer-meta" id="timerMeta">Parked · leave by —</div>
+    <div class="timer-actions">
+      <button type="button" class="btn btn-danger btn-sm" id="btnEndPark">End parking</button>
+    </div>
+  </div>
+
+  <!-- Primary CTA -->
+  <div class="actions">
+    <button type="button" class="btn btn-primary" id="btnPark">Park now</button>
+  </div>
+
+  <p class="footer-note">Follow local signs · Signaling Ordinance 1979</p>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Disc info sheet (skeuomorphic) -->
+  <div class="sheet" id="sheetDisc" role="dialog" aria-labelledby="discSheetTitle">
+    <div class="sheet-handle"></div>
+    <button type="button" class="sheet-close" data-close aria-label="Close">×</button>
+    <div class="sheet-title" id="discSheetTitle">Set your disc</div>
+    <div class="disc-showcase">
+      <div class="parking-disc" aria-hidden="true">
+        <div class="disc-ticks" id="discTicks"></div>
+        <div class="disc-wheel" id="discWheel">
+          <span class="disc-pointer"></span>
+        </div>
+        <div class="disc-hub">
+          <div class="disc-label-top">Set to</div>
+          <div class="disc-time-display" id="discFaceTime">—</div>
+        </div>
+      </div>
+      <p class="disc-help">
+        Set the wheel to the <strong>next half-hour mark after</strong> you arrive.<br />
+        Example: arrive <strong>9:05</strong> → set <strong>9:30</strong> → leave by <strong>10:30</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Rules sheet -->
+  <div class="sheet" id="sheetRules" role="dialog" aria-labelledby="rulesTitle">
+    <div class="sheet-handle"></div>
+    <button type="button" class="sheet-close" data-close aria-label="Close">×</button>
+    <div class="sheet-title" id="rulesTitle">Rules</div>
+    <div class="rules">
+      <h3>Time limits (Mon–Sat)</h3>
+      <ul>
+        <li>08:00–11:30 &amp; 13:30–18:00 → max <strong>1 hour</strong></li>
+        <li>Arrival 11:30–13:30 → valid until <strong>14:30</strong></li>
+        <li>Arrival 18:00–08:00 → valid until <strong>09:00</strong></li>
+      </ul>
+      <h3>Sundays &amp; public holidays</h3>
+      <p>No time limit unless an extra sign says otherwise.</p>
+      <h3>Setting the disc</h3>
+      <p>Set the wheel to the <strong>next time-line after</strong> arrival. Electronic discs are not permitted. Disc must be clearly visible and upright.</p>
+      <h3>No disc needed</h3>
+      <p>19:00–07:59 if you rejoin traffic before 08:00.</p>
+      <h3>Invalid if</h3>
+      <ul>
+        <li>Slanted or not fully visible</li>
+        <li>Arrival time set incorrectly</li>
+        <li>Max parking time exceeded</li>
+        <li>Time re-adjusted without rejoining traffic</li>
+      </ul>
+      <h3>Where to get a disc</h3>
+      <ul>
+        <li>Transport Service licensing office — Mühlegasse 18</li>
+        <li>Zurich City Police guards</li>
+        <li>Specialist retailers</li>
+      </ul>
+      <p style="margin-top:12px;font-size:11px;opacity:0.7">Legal basis: Signaling Ordinance of 5 September 1979. Always follow local signs.</p>
+    </div>
+  </div>
+
+  <!-- Settings sheet -->
+  <div class="sheet" id="sheetSettings" role="dialog" aria-labelledby="settingsTitle">
+    <div class="sheet-handle"></div>
+    <button type="button" class="sheet-close" data-close aria-label="Close">×</button>
+    <div class="sheet-title" id="settingsTitle">Settings</div>
+
+    <div class="field">
+      <label for="setCanton">Canton</label>
+      <select id="setCanton">
+        <option value="ZH">Zürich</option>
+        <option value="BE">Bern</option>
+        <option value="GE">Genève</option>
+        <option value="VD">Vaud</option>
+        <option value="BS">Basel-Stadt</option>
+        <option value="BL">Basel-Land</option>
+        <option value="AG">Aargau</option>
+        <option value="SG">St. Gallen</option>
+        <option value="LU">Luzern</option>
+        <option value="TI">Ticino</option>
+        <option value="VS">Valais</option>
+        <option value="ZG">Zug</option>
+        <option value="FR">Fribourg</option>
+        <option value="SO">Solothurn</option>
+        <option value="TG">Thurgau</option>
+        <option value="SH">Schaffhausen</option>
+        <option value="GR">Graubünden</option>
+        <option value="NE">Neuchâtel</option>
+        <option value="JU">Jura</option>
+        <option value="SZ">Schwyz</option>
+        <option value="UR">Uri</option>
+        <option value="OW">Obwalden</option>
+        <option value="NW">Nidwalden</option>
+        <option value="GL">Glarus</option>
+        <option value="AR">Appenzell AR</option>
+        <option value="AI">Appenzell IR</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="setNotifyMins">Notify before expiry (minutes)</label>
+      <input type="number" id="setNotifyMins" min="1" max="60" step="1" value="10" />
+    </div>
+
+    <div class="toggle-row">
+      <span>Enable notifications</span>
+      <label class="toggle">
+        <input type="checkbox" id="setNotifyOn" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <span>Treat as public holiday</span>
+      <label class="toggle">
+        <input type="checkbox" id="setForceHoliday" />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <span>Auto-detect location</span>
+      <label class="toggle">
+        <input type="checkbox" id="setAutoLoc" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:16px" id="settingsMeta">Holidays: —</p>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+  /**
+   * Blue Zone Parking — v0.3.0
+   * Extensible client-side app. No backend. State in localStorage.
+   * Security: no eval, no user HTML injection, API responses validated lightly.
+   */
+  (function () {
+    "use strict";
+
+    const VERSION = "0.3.0";
+    const STORAGE = {
+      settings: "bz.settings.v1",
+      session: "bz.session.v1",
+      holidays: "bz.holidays.v1",
+      notified: "bz.notified.v1"
+    };
+
+    const CANTON_CENTERS = {
+      ZH: [47.3769, 8.5417], BE: [46.9480, 7.4474], GE: [46.2044, 6.1432],
+      VD: [46.5197, 6.6323], BS: [47.5596, 7.5886], BL: [47.4416, 7.7649],
+      AG: [47.3900, 8.0450], SG: [47.4245, 9.3767], LU: [47.0502, 8.3093],
+      TI: [46.2044, 9.0211], VS: [46.2333, 7.6000], ZG: [47.1662, 8.5155],
+      FR: [46.8065, 7.1620], SO: [47.2088, 7.5323], TG: [47.6038, 9.0550],
+      SH: [47.6973, 8.6349], GR: [46.8499, 9.5329], NE: [46.9900, 6.9293],
+      JU: [47.3654, 7.3452], SZ: [47.0207, 8.6530], UR: [46.8804, 8.6444],
+      OW: [46.8770, 8.2510], NW: [46.9268, 8.3850], GL: [47.0404, 9.0672],
+      AR: [47.3667, 9.3000], AI: [47.3308, 9.4090]
+    };
+
+    const CANTON_NAMES = {
+      ZH: "Zürich", BE: "Bern", GE: "Genève", VD: "Vaud", BS: "Basel-Stadt",
+      BL: "Basel-Land", AG: "Aargau", SG: "St. Gallen", LU: "Luzern", TI: "Ticino",
+      VS: "Valais", ZG: "Zug", FR: "Fribourg", SO: "Solothurn", TG: "Thurgau",
+      SH: "Schaffhausen", GR: "Graubünden", NE: "Neuchâtel", JU: "Jura", SZ: "Schwyz",
+      UR: "Uri", OW: "Obwalden", NW: "Nidwalden", GL: "Glarus", AR: "Appenzell AR", AI: "Appenzell IR"
+    };
+
+    const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    /** @type {{ canton: string, notifyMins: number, notifyOn: boolean, forceHoliday: boolean, autoLoc: boolean }} */
+    let settings = {
+      canton: "ZH",
+      notifyMins: 10,
+      notifyOn: true,
+      forceHoliday: false,
+      autoLoc: true
+    };
+
+    /** @type {{ date: string, name: string }[]} */
+    let holidays = [];
+
+    /** @type {{ startMs: number, leaveByMs: number, discLabel: string, leaveLabel: string } | null} */
+    let session = null;
+
+    let autoHolidayName = "";
+    let tickTimer = null;
+    let notifiedForSession = false;
+
+    // ─── DOM helpers ───
+    const $ = (id) => document.getElementById(id);
+
+    function pad(n) { return String(n).padStart(2, "0"); }
+    function formatTime(d) { return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+    function dateKey(d) {
+      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+    }
+    function minutesSinceMidnight(d) { return d.getHours() * 60 + d.getMinutes(); }
+    function fromMinutes(m) {
+      const h = Math.floor(((m % 1440) + 1440) % 1440 / 60);
+      const min = ((m % 1440) + 1440) % 1440 % 60;
+      return pad(h) + ":" + pad(min);
+    }
+    function nextTimeLineAfter(mins) {
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      if (m === 0) return h * 60 + 30;
+      if (m < 30) return h * 60 + 30;
+      return (h + 1) * 60;
+    }
+
+    function toast(msg, ms) {
+      const el = $("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(function () { el.classList.remove("show"); }, ms || 2800);
+    }
+
+    function loadJSON(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        return JSON.parse(raw);
+      } catch (_) { return fallback; }
+    }
+    function saveJSON(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch (_) {}
+    }
+
+    // ─── Settings ───
+    function loadSettings() {
+      const s = loadJSON(STORAGE.settings, null);
+      if (s && typeof s === "object") {
+        settings = Object.assign({}, settings, s);
+      }
+      $("setCanton").value = settings.canton;
+      $("setNotifyMins").value = String(settings.notifyMins);
+      $("setNotifyOn").checked = !!settings.notifyOn;
+      $("setForceHoliday").checked = !!settings.forceHoliday;
+      $("setAutoLoc").checked = !!settings.autoLoc;
+    }
+
+    function persistSettings() {
+      settings.canton = $("setCanton").value;
+      settings.notifyMins = Math.min(60, Math.max(1, parseInt($("setNotifyMins").value, 10) || 10));
+      settings.notifyOn = $("setNotifyOn").checked;
+      settings.forceHoliday = $("setForceHoliday").checked;
+      settings.autoLoc = $("setAutoLoc").checked;
+      saveJSON(STORAGE.settings, settings);
+      $("setNotifyMins").value = String(settings.notifyMins);
+    }
+
+    // ─── Holidays ───
+    function loadCachedHolidays() {
+      const cached = loadJSON(STORAGE.holidays, null);
+      if (cached && cached.canton === settings.canton && Array.isArray(cached.holidays)) {
+        holidays = cached.holidays;
+      }
+    }
+
+    async function fetchHolidays(canton) {
+      const year = new Date().getFullYear();
+      const urls = [
+        "https://openholidaysapi.org/PublicHolidays?countryIsoCode=CH&languageIsoCode=EN&validFrom=" + year + "-01-01&validTo=" + year + "-12-31&subdivisionCode=CH-" + canton,
+        "https://openholidaysapi.org/PublicHolidays?countryIsoCode=CH&languageIsoCode=EN&validFrom=" + (year + 1) + "-01-01&validTo=" + (year + 1) + "-12-31&subdivisionCode=CH-" + canton
+      ];
+      try {
+        const results = await Promise.all(urls.map(function (u) {
+          return fetch(u).then(function (r) { return r.ok ? r.json() : []; });
+        }));
+        const map = new Map();
+        results.forEach(function (arr) {
+          if (!Array.isArray(arr)) return;
+          arr.forEach(function (h) {
+            if (!h || (h.type !== "Public" && h.type !== "Optional")) return;
+            if (typeof h.startDate !== "string") return;
+            const name = (h.name && h.name[0] && h.name[0].text) || "Public holiday";
+            if (!map.has(h.startDate)) map.set(h.startDate, { date: h.startDate, name: String(name).slice(0, 80) });
+          });
+        });
+        holidays = Array.from(map.values());
+        saveJSON(STORAGE.holidays, { canton: canton, year: year, holidays: holidays });
+        $("settingsMeta").textContent = "Holidays loaded for CH-" + canton + " · OpenHolidays API";
+      } catch (_) {
+        $("settingsMeta").textContent = "Holiday data offline — use toggle if needed";
+      }
+      refreshHolidayChip();
+      updateUI();
+    }
+
+    function todayIsHoliday() {
+      if (settings.forceHoliday) return { yes: true, name: "Public holiday (manual)" };
+      const key = dateKey(new Date());
+      const found = holidays.find(function (h) { return h.date === key; });
+      if (found) return { yes: true, name: found.name };
+      return { yes: false, name: "" };
+    }
+
+    function refreshHolidayChip() {
+      const hol = todayIsHoliday();
+      const isSun = new Date().getDay() === 0;
+      const chip = $("chipHoliday");
+      if (hol.yes || isSun) {
+        chip.classList.remove("hidden");
+        $("holidayLabel").textContent = hol.yes ? hol.name : "Sunday";
+        autoHolidayName = hol.yes ? hol.name : "Sunday";
+      } else {
+        chip.classList.add("hidden");
+        autoHolidayName = "";
+      }
+    }
+
+    // ─── Location ───
+    function haversine(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function nearestCanton(lat, lon) {
+      let best = "ZH", bestDist = Infinity;
+      Object.keys(CANTON_CENTERS).forEach(function (code) {
+        const c = CANTON_CENTERS[code];
+        const d = haversine(lat, lon, c[0], c[1]);
+        if (d < bestDist) { bestDist = d; best = code; }
+      });
+      return best;
+    }
+
+    function setLocLabel(text) {
+      $("locLabel").textContent = text;
+    }
+
+    function detectLocation() {
+      if (!settings.autoLoc) {
+        setLocLabel(CANTON_NAMES[settings.canton] || settings.canton);
+        return;
+      }
+      if (!navigator.geolocation) {
+        setLocLabel(CANTON_NAMES[settings.canton] || settings.canton);
+        return;
+      }
+      setLocLabel("Locating…");
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          const code = nearestCanton(pos.coords.latitude, pos.coords.longitude);
+          if (code !== settings.canton) {
+            settings.canton = code;
+            $("setCanton").value = code;
+            saveJSON(STORAGE.settings, settings);
+            fetchHolidays(code);
+          }
+          setLocLabel(CANTON_NAMES[code] || code);
+        },
+        function () {
+          setLocLabel((CANTON_NAMES[settings.canton] || settings.canton) + " · GPS off");
+        },
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    }
+
+    // ─── Rules engine ───
+    /**
+     * @returns {{ title: string, sub: string, disc: string|null, leaveBy: string|null, color: string, free: boolean }}
+     */
+    function computeRules(now) {
+      const hol = todayIsHoliday();
+      const isSun = now.getDay() === 0;
+      const mins = minutesSinceMidnight(now);
+
+      if (hol.yes || isSun) {
+        return {
+          title: "No time limit",
+          sub: hol.yes ? (hol.name + " · free unless extra sign") : "Sunday · free unless extra sign",
+          disc: null,
+          leaveBy: null,
+          color: "var(--ok)",
+          free: true
+        };
+      }
+
+      if (mins >= 19 * 60 || mins < 8 * 60) {
+        if (mins < 8 * 60) {
+          const setTo = nextTimeLineAfter(mins);
+          return {
+            title: "Valid until 09:00",
+            sub: "Arrival before 08:00",
+            disc: fromMinutes(setTo),
+            leaveBy: "09:00",
+            color: "var(--warn)",
+            free: false
+          };
+        }
+        return {
+          title: "No disc needed",
+          sub: "Until 08:00 if you leave before then",
+          disc: null,
+          leaveBy: "08:00",
+          color: "var(--accent-bright)",
+          free: true
+        };
+      }
+
+      if (mins >= 8 * 60 && mins < 11 * 60 + 30) {
+        const setTo = nextTimeLineAfter(mins);
+        return {
+          title: "Max 1 hour",
+          sub: "08:00 – 11:30",
+          disc: fromMinutes(setTo),
+          leaveBy: fromMinutes(setTo + 60),
+          color: "var(--accent-bright)",
+          free: false
+        };
+      }
+
+      if (mins >= 11 * 60 + 30 && mins < 13 * 60 + 30) {
+        const setTo = nextTimeLineAfter(mins);
+        return {
+          title: "Valid until 14:30",
+          sub: "Midday window (11:30–13:30)",
+          disc: fromMinutes(setTo),
+          leaveBy: "14:30",
+          color: "var(--warn)",
+          free: false
+        };
+      }
+
+      if (mins >= 13 * 60 + 30 && mins < 18 * 60) {
+        const setTo = nextTimeLineAfter(mins);
+        return {
+          title: "Max 1 hour",
+          sub: "13:30 – 18:00",
+          disc: fromMinutes(setTo),
+          leaveBy: fromMinutes(setTo + 60),
+          color: "var(--accent-bright)",
+          free: false
+        };
+      }
+
+      if (mins >= 18 * 60 && mins < 19 * 60) {
+        const setTo = nextTimeLineAfter(mins);
+        return {
+          title: "Valid until 09:00",
+          sub: "Evening arrival",
+          disc: fromMinutes(setTo),
+          leaveBy: "09:00",
+          color: "var(--warn)",
+          free: false
+        };
+      }
+
+      return {
+        title: "Check signs",
+        sub: "Unable to determine for this moment",
+        disc: null,
+        leaveBy: null,
+        color: "var(--muted)",
+        free: false
+      };
+    }
+
+    // ─── Session / timer ───
+    function loadSession() {
+      const s = loadJSON(STORAGE.session, null);
+      if (s && typeof s.leaveByMs === "number" && s.leaveByMs > Date.now() - 60000) {
+        session = s;
+        notifiedForSession = !!loadJSON(STORAGE.notified, false);
+      } else {
+        session = null;
+        localStorage.removeItem(STORAGE.session);
+        localStorage.removeItem(STORAGE.notified);
+      }
+    }
+
+    function startPark() {
+      const now = new Date();
+      const rules = computeRules(now);
+      if (rules.free && !rules.leaveBy) {
+        toast("No time limit right now — no timer needed");
+        return;
+      }
+      if (!rules.leaveBy) {
+        toast("Cannot start timer — check local signs");
+        return;
+      }
+
+      // Build leave-by Date from label (HH:MM), handling overnight
+      const parts = rules.leaveBy.split(":");
+      const leave = new Date(now);
+      leave.setSeconds(0, 0);
+      leave.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
+      if (leave.getTime() <= now.getTime()) {
+        leave.setDate(leave.getDate() + 1);
+      }
+
+      session = {
+        startMs: now.getTime(),
+        leaveByMs: leave.getTime(),
+        discLabel: rules.disc || "—",
+        leaveLabel: rules.leaveBy
+      };
+      notifiedForSession = false;
+      saveJSON(STORAGE.session, session);
+      localStorage.removeItem(STORAGE.notified);
+      updateUI();
+      requestNotifyPermission();
+      toast("Parking started · leave by " + rules.leaveBy);
+    }
+
+    function endPark() {
+      session = null;
+      localStorage.removeItem(STORAGE.session);
+      localStorage.removeItem(STORAGE.notified);
+      notifiedForSession = false;
+      updateUI();
+      toast("Parking ended");
+    }
+
+    function formatRemaining(ms) {
+      if (ms <= 0) return "00:00";
+      const totalSec = Math.floor(ms / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      if (h > 0) return pad(h) + ":" + pad(m) + ":" + pad(s);
+      return pad(m) + ":" + pad(s);
+    }
+
+    function updateTimerDisplay() {
+      if (!session) return;
+      const left = session.leaveByMs - Date.now();
+      const el = $("timerValue");
+      el.textContent = formatRemaining(left);
+      el.classList.remove("warn", "danger");
+      if (left <= 0) {
+        el.classList.add("danger");
+        el.textContent = "00:00";
+        $("timerMeta").textContent = "Time expired · move the vehicle";
+      } else if (left <= 5 * 60 * 1000) {
+        el.classList.add("danger");
+        $("timerMeta").textContent = "Leave by " + session.leaveLabel + " · disc " + session.discLabel;
+      } else if (left <= settings.notifyMins * 60 * 1000) {
+        el.classList.add("warn");
+        $("timerMeta").textContent = "Leave by " + session.leaveLabel + " · disc " + session.discLabel;
+      } else {
+        $("timerMeta").textContent = "Leave by " + session.leaveLabel + " · disc " + session.discLabel;
+      }
+
+      // Notification
+      if (
+        settings.notifyOn &&
+        !notifiedForSession &&
+        left > 0 &&
+        left <= settings.notifyMins * 60 * 1000
+      ) {
+        sendNotification(
+          "Blue Zone — " + formatRemaining(left) + " left",
+          "Leave by " + session.leaveLabel + ". Move your vehicle soon."
+        );
+        notifiedForSession = true;
+        saveJSON(STORAGE.notified, true);
+      }
+    }
+
+    function requestNotifyPermission() {
+      if (!settings.notifyOn) return;
+      if (!("Notification" in window)) return;
+      if (Notification.permission === "default") {
+        Notification.requestPermission().catch(function () {});
+      }
+    }
+
+    function sendNotification(title, body) {
+      if (!("Notification" in window)) return;
+      if (Notification.permission !== "granted") return;
+      try {
+        const n = new Notification(title, {
+          body: body,
+          icon: "icons/icon-192.png",
+          tag: "bz-expiry",
+          renotify: true
+        });
+        setTimeout(function () { n.close(); }, 12000);
+      } catch (_) {}
+    }
+
+    // ─── UI ───
+    function updateUI() {
+      const now = new Date();
+      $("clockTime").textContent = formatTime(now);
+      $("clockDay").textContent = DAYS[now.getDay()];
+      $("appVersion").textContent = "v" + VERSION;
+
+      refreshHolidayChip();
+
+      const rules = computeRules(now);
+      $("statusCard").style.setProperty("--status-color", rules.color);
+      $("statusTitle").textContent = rules.title;
+      $("statusSub").textContent = rules.sub;
+      $("discTime").textContent = rules.disc || "—";
+      $("leaveBy").textContent = rules.leaveBy || "—";
+      $("discHint").textContent = rules.disc ? "Next half-hour mark" : "Not required";
+      $("leaveHint").textContent = rules.leaveBy ? "Must be gone by" : "—";
+      $("discFaceTime").textContent = rules.disc || "—";
+
+      // Session UI
+      const hasSession = !!session;
+      $("timerCard").classList.toggle("active", hasSession);
+      $("btnPark").style.display = hasSession ? "none" : "flex";
+      $("btnPark").disabled = rules.free && !rules.leaveBy;
+
+      if (hasSession) updateTimerDisplay();
+    }
+
+    // ─── Sheets ───
+    function openSheet(id) {
+      $("overlay").classList.add("open");
+      $(id).classList.add("open");
+      if (id === "sheetDisc") spinDisc($("discFaceTime").textContent);
+    }
+    function closeSheets() {
+      $("overlay").classList.remove("open");
+      document.querySelectorAll(".sheet").forEach(function (el) {
+        el.classList.remove("open");
+      });
+      persistSettings();
+      refreshHolidayChip();
+      updateUI();
+    }
+
+    // ─── Disc ticks (decorative) ───
+    function buildDiscTicks() {
+      const host = $("discTicks");
+      host.innerHTML = "";
+      for (let i = 0; i < 48; i++) {
+        const t = document.createElement("div");
+        t.className = "disc-tick" + (i % 2 === 0 ? " major" : "");
+        t.style.transform = "rotate(" + (i * 7.5) + "deg)";
+        host.appendChild(t);
+      }
+      for (let h = 0; h < 24; h++) {
+        const el = document.createElement("div");
+        el.className = "disc-hour";
+        el.textContent = String(h).padStart(2, "0");
+        el.style.transform = "rotate(" + (h * 15) + "deg)";
+        host.appendChild(el);
+      }
+    }
+
+    function timeToDeg(label) {
+      if (!label || !/^\d{1,2}:\d{2}$/.test(label)) return 0;
+      const p = label.split(":");
+      return ((Number(p[0]) % 24) + Number(p[1]) / 60) * 15;
+    }
+
+    function spinDisc(label) {
+      const wheel = $("discWheel");
+      if (!wheel) return;
+      const dest = timeToDeg(label);
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) {
+        wheel.style.transform = "translate(-50%, -50%) rotate(" + dest + "deg)";
+        return;
+      }
+      wheel.style.transition = "none";
+      wheel.style.transform = "translate(-50%, -50%) rotate(0deg)";
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          wheel.style.transition = "transform 1.35s cubic-bezier(0.22, 1.15, 0.36, 1)";
+          wheel.style.transform = "translate(-50%, -50%) rotate(" + dest + "deg)";
+        });
+      });
+    }
+
+    // ─── Events ───
+    function bindEvents() {
+      $("btnPark").addEventListener("click", startPark);
+      $("btnEndPark").addEventListener("click", endPark);
+      $("btnInfo").addEventListener("click", function () { openSheet("sheetRules"); });
+      $("btnSettings").addEventListener("click", function () { openSheet("sheetSettings"); });
+      $("btnDiscInfo").addEventListener("click", function () { openSheet("sheetDisc"); });
+      $("overlay").addEventListener("click", closeSheets);
+      document.querySelectorAll("[data-close]").forEach(function (btn) {
+        btn.addEventListener("click", closeSheets);
+      });
+
+      $("setCanton").addEventListener("change", function () {
+        persistSettings();
+        setLocLabel(CANTON_NAMES[settings.canton] || settings.canton);
+        fetchHolidays(settings.canton);
+      });
+      $("setNotifyMins").addEventListener("change", persistSettings);
+      $("setNotifyOn").addEventListener("change", function () {
+        persistSettings();
+        if (settings.notifyOn) requestNotifyPermission();
+      });
+      $("setForceHoliday").addEventListener("change", function () {
+        persistSettings();
+        refreshHolidayChip();
+        updateUI();
+      });
+      $("setAutoLoc").addEventListener("change", function () {
+        persistSettings();
+        if (settings.autoLoc) detectLocation();
+        else setLocLabel(CANTON_NAMES[settings.canton] || settings.canton);
+      });
+    }
+
+    // ─── Boot ───
+    function boot() {
+      $("appVersion").textContent = "v" + VERSION;
+      loadSettings();
+      loadCachedHolidays();
+      loadSession();
+      buildDiscTicks();
+      bindEvents();
+      setLocLabel(CANTON_NAMES[settings.canton] || settings.canton);
+      detectLocation();
+      fetchHolidays(settings.canton);
+      updateUI();
+      tickTimer = setInterval(updateUI, 1000);
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js").catch(function () {});
+        });
+      }
+    }
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+- Blue Zone parking webapp lives in artifacts/blue-zone-parking/ (PWA: index.html, sw.js, manifest, icons) [2026-09-11]
+- App version 0.2.0: auto GPS→canton, OpenHolidays, Park timer + notifications, settings/rules sheets, skeuomorphic disc [2026-09-11]
+- Project log: artifacts/blue-zone-parking/CHANGELOG.md — update on each meaningful change [2026-09-11]
+- Deploy target: GitHub Pages from repo root of blue-zone-parking [2026-09-11]
