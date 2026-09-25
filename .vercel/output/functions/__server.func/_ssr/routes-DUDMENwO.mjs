@@ -3,7 +3,7 @@ import { L as require_react, v as require_jsx_runtime } from "../_libs/@tanstack
 import { a as Info, c as Bell, i as MapPin, o as Download, r as Settings, s as CircleParking, t as X } from "../_libs/lucide-react.mjs";
 import { t as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DtYjS1HU.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DUDMENwO.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -84,12 +84,12 @@ function ParkingDisc({ timeLabel, animate = true, size = "hero", className }) {
 		"aria-label": timeLabel ? `Parking disc set to ${timeLabel}` : "Parking disc",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "bz-disc-body absolute inset-0 rounded-full" }),
-			ticks.map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			size === "hero" && ticks.map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 				className: cn("bz-disc-tick absolute left-1/2 top-[5%] origin-[50%_900%]", i % 2 === 0 ? "h-2.5 w-0.5 bg-white/80" : "h-1.5 w-px bg-white/40"),
 				style: { transform: `translateX(-50%) rotate(${i * 7.5}deg)` }
 			}, `t-${i}`)),
-			hours.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: cn("bz-disc-hour absolute left-1/2 top-[11%] origin-[50%_380%]", size === "hero" ? "text-[9px]" : "text-[0px]"),
+			size === "hero" && hours.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "bz-disc-hour absolute left-1/2 top-[11%] origin-[50%_380%] text-[9px]",
 				style: { transform: `translateX(-50%) rotate(${h * 15}deg)` },
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					style: {
@@ -443,6 +443,14 @@ function BlueZoneApp() {
 		settings.canton,
 		loadHolidayData
 	]);
+	(0, import_react.useEffect)(() => {
+		if (!sheet) return;
+		const onKey = (e) => {
+			if (e.key === "Escape") setSheet(null);
+		};
+		window.addEventListener("keydown", onKey);
+		return () => window.removeEventListener("keydown", onKey);
+	}, [sheet]);
 	(0, import_react.useEffect)(() => {
 		if (!ready || !settings.autoLoc || !navigator.geolocation) return;
 		setLocLabel("Locating…");

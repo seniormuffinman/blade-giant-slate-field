@@ -2,9 +2,9 @@
 
 Minimal parking-disc helper for Blue Zone / “Parking with parking disc” areas (Switzerland).
 
-**Version:** 0.3.0
+**Version:** 0.2.0
 
-Shows whether you can park now, what time to set on the disc, when you must leave, and runs a countdown with optional notification. The disc wheel animates to the set time.
+Shows whether you can park now, what time to set on the disc, when you must leave, and runs a countdown with optional notification.
 
 ## Deploy to GitHub Pages
 
@@ -15,19 +15,20 @@ Shows whether you can park now, what time to set on the disc, when you must leav
 cd blue-zone-parking
 git init
 git add .
-git commit -m "Blue Zone v0.3.0"
+git commit -m "Blue Zone v0.2.0"
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/blue-zone-parking.git
 git push -u origin main
 ```
 
-3. Repo → **Settings** → **Pages** → branch `main` / root → Save.
+3. Repo → **Settings** → **Pages** → branch `main` / root → Save.  
+   Site: `https://YOUR_USERNAME.github.io/blue-zone-parking/`
 
 ## Install on phone
 
-- **Android Chrome:** open site → Install app / Add to Home screen
-- **iOS Safari:** Share → Add to Home Screen
+- **Android Chrome:** open site → Install app / Add to Home screen  
+- **iOS Safari:** Share → Add to Home Screen  
 
 ## Docs
 
-See [CHANGELOG.md](./CHANGELOG.md).
+See [CHANGELOG.md](./CHANGELOG.md) for feature history and design notes.

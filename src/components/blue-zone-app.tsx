@@ -76,6 +76,15 @@ export function BlueZoneApp() {
   }, [ready, settings.canton, loadHolidayData]);
 
   useEffect(() => {
+    if (!sheet) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSheet(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [sheet]);
+
+  useEffect(() => {
     if (!ready || !settings.autoLoc || !navigator.geolocation) return;
     setLocLabel("Locating…");
     navigator.geolocation.getCurrentPosition(
