@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Bell, Download, Info, MapPin, ParkingCircle, Settings as SettingsIcon } from "lucide-react";
+import { Bell, Info, MapPin, ParkingCircle, Settings as SettingsIcon } from "lucide-react";
 import { ParkingDisc } from "@/components/parking-disc";
 import { Sheet } from "@/components/sheet";
 import {
@@ -435,14 +435,6 @@ export function BlueZoneApp() {
           onChange={(v) => persist({ ...settings, autoLoc: v })}
         />
 
-        <a
-          href="/blue-zone-parking.zip"
-          download="blue-zone-parking.zip"
-          className="mt-5 flex items-center justify-center gap-2 rounded-[14px] border border-border bg-surface-2 px-4 py-3 text-sm font-semibold text-fg"
-        >
-          <Download className="size-4" />
-          Download app folder (.zip)
-        </a>
         <p className="mt-4 flex items-center gap-1.5 text-xs text-muted">
           <Bell className="size-3.5" />
           {holidayMeta}

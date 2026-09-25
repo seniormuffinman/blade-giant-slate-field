@@ -1,55 +1,43 @@
-# Blue Zone Parking — Project Log
+# Blue Zone Parking — changelog
 
-Living document of design decisions, features, and iteration history.
-Update this file whenever the app changes meaningfully.
+## Current version: 0.3.1 — 25 September 2026
 
----
-
-## Current version: **0.3.0** (2026-09-11)
-
-### Summary
-Mobile-first PWA for Swiss Blue Zone / parking-disc rules. Uses device clock, optional GPS → canton, OpenHolidays API, a parking session timer with notifications, and an animated skeuomorphic disc.
-
-### Features (v0.3.0)
+Parking-disc helper for Swiss Blue Zone rules. Device clock, optional GPS → canton, public holidays, park timer with notifications, animated disc.
 
 | Area | Behaviour |
 |------|-----------|
-| **Clock** | Live device time, updates every second |
-| **Location** | Auto-detect on open (GPS → nearest canton). Can disable in Settings |
-| **Public holidays** | Fetched per canton from OpenHolidays API; chip shown only when today is a holiday or Sunday |
-| **Rules engine** | Mon–Sat windows (1 h / midday / overnight); free on Sun & holidays |
-| **Park session** | “Park now” starts countdown to leave-by; persists in `localStorage` |
-| **Notifications** | Optional; fires once when remaining time ≤ configured minutes (default 10) |
-| **Settings** | Canton, notify lead time, enable notifications, force holiday, auto-location |
-| **Info** | Rules in a sheet |
-| **Disc animation** | Wheel spins from 00:00 to the set half-hour (red pointer, 24h scale). Respects reduced-motion |
-| **Download** | Zip of the standalone folder for GitHub Pages / offline |
+| Clock | Live device time |
+| Location | Auto-detect on open (GPS → nearest canton). Can disable in Settings |
+| Public holidays | Per canton via OpenHolidays API; chip only on a holiday or Sunday |
+| Rules | Mon–Sat windows (1 h / midday / overnight); free on Sun & holidays |
+| Park | Countdown to leave-by; stored in the browser |
+| Notifications | Optional; once, N minutes before expiry (default 10) |
+| Settings | Canton, notify lead time, notifications, force holiday, auto-location |
+| Disc | Wheel spins to the half-hour you should set |
 
-### Disc animation
-- Outer blue rim: 24-hour labels + 30-minute ticks
-- Inner white wheel rotates so the red pointer indicates the time to set
-- Opening the disc sheet replays the spin (1.35s ease-out)
-- Mini disc on the main “Set disc to” tile stays at the current target
-
-### Storage keys
+### Storage
 
 | Key | Content |
 |-----|---------|
 | `bz.settings.v1` | canton, notifyMins, notifyOn, forceHoliday, autoLoc |
 | `bz.session.v1` | startMs, leaveByMs, discLabel, leaveLabel |
-| `bz.holidays.v1` | cached holiday list for canton + year |
-| `bz.notified.v1` | whether expiry notification already sent for current session |
+| `bz.holidays.v1` | cached holidays for canton + year |
+| `bz.notified.v1` | whether the expiry notification already fired |
 
 ---
 
 ## History
 
-### 0.1.0 (2026-09-11)
-- Initial single-page helper, live clock, rule windows, canton + holidays, PWA
+### 0.3.1 — 25 September 2026
+- GitLab Pages job so `index.html` is published at the site root
+- Simpler README
+- Removed zip download
 
-### 0.2.0 (2026-09-11)
-- Main UI chips, Park session, notifications, settings/rules sheets, version badge
+### 0.3.0 — 11 September 2026
+- Animated parking disc
 
-### 0.3.0 (2026-09-11)
-- Animated skeuomorphic parking disc
-- Zip download of the standalone app folder
+### 0.2.0 — 11 September 2026
+- Park session, notifications, settings and rules sheets
+
+### 0.1.0 — 11 September 2026
+- First helper: live clock, rule windows, canton + holidays

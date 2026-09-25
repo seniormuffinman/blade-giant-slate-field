@@ -1,0 +1,16 @@
+# GitLab Pages — publishes this folder so index.html is at the site root.
+pages:
+  image: alpine:latest
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp index.html public/index.html
+    - cp index.html public/404.html
+    - cp manifest.webmanifest public/manifest.webmanifest
+    - cp sw.js public/sw.js
+    - cp -r icons public/icons
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

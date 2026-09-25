@@ -1,4 +1,4 @@
-const CACHE = "blue-zone-v2";
+const CACHE = "blue-zone-v3";
 const ASSETS = [
   "./",
   "./index.html",

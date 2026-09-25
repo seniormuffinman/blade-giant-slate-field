@@ -1,0 +1,16 @@
+# GitLab Pages for the full workspace. Publishes the static Blue Zone app.
+pages:
+  image: alpine:latest
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp artifacts/blue-zone-parking/index.html public/index.html
+    - cp artifacts/blue-zone-parking/index.html public/404.html
+    - cp artifacts/blue-zone-parking/manifest.webmanifest public/manifest.webmanifest
+    - cp artifacts/blue-zone-parking/sw.js public/sw.js
+    - cp -r artifacts/blue-zone-parking/icons public/icons
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

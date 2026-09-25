@@ -1,34 +1,35 @@
-# Blue Zone Parking
+# Blue Zone
 
-Minimal parking-disc helper for Blue Zone / “Parking with parking disc” areas (Switzerland).
+Parking-disc helper for Swiss Blue Zone spots. Shows if you can park, which time to set on the disc, and when you must leave.
 
-**Version:** 0.2.0
+## Run it
 
-Shows whether you can park now, what time to set on the disc, when you must leave, and runs a countdown with optional notification.
+Open `index.html` in a browser.
 
-## Deploy to GitHub Pages
+For location and “Add to Home Screen”, serve the folder:
 
-1. Create a public repo (e.g. `blue-zone-parking`).
-2. Push this folder:
-
-```bash
-cd blue-zone-parking
-git init
-git add .
-git commit -m "Blue Zone v0.2.0"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/blue-zone-parking.git
-git push -u origin main
+```
+python3 -m http.server
 ```
 
-3. Repo → **Settings** → **Pages** → branch `main` / root → Save.  
-   Site: `https://YOUR_USERNAME.github.io/blue-zone-parking/`
+Then open the address it prints (usually `http://localhost:8000`).
 
-## Install on phone
+## GitLab Pages
 
-- **Android Chrome:** open site → Install app / Add to Home screen  
-- **iOS Safari:** Share → Add to Home Screen  
+1. Create a GitLab project.
+2. Put **these files at the repository root** — `index.html` must not sit inside a subfolder.
+3. Push to `main` (or your default branch). The included `.gitlab-ci.yml` publishes the site.
+4. Wait for the pipeline to pass, then open **Deploy → Pages** for the URL.
 
-## Docs
+If Pages says *“does not contain the requested file”*, `index.html` is nested. Move everything up one level so the repo looks like:
 
-See [CHANGELOG.md](./CHANGELOG.md) for feature history and design notes.
+```
+index.html
+.gitlab-ci.yml
+manifest.webmanifest
+sw.js
+icons/
+README.md
+```
+
+Push again and wait for the pipeline.
