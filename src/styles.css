@@ -56,7 +56,10 @@
 .bz-disc-hour {
   color: white;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.bz-disc-tick {
   pointer-events: none;
 }
 

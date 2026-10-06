@@ -437,24 +437,23 @@
     }
     .disc-tick {
       position: absolute;
-      left: 50%; top: 5%;
-      width: 2px; height: 8px;
-      background: rgba(255,255,255,0.45);
-      transform-origin: 50% 108px;
-      margin-left: -1px;
+      width: 2px;
+      height: 8px;
+      background: rgba(255,255,255,0.4);
+      transform-origin: center center;
+      pointer-events: none;
     }
-    .disc-tick.major { height: 11px; width: 2.5px; background: #fff; }
+    .disc-tick.major { height: 10px; width: 2px; background: rgba(255,255,255,0.85); }
     .disc-hour {
       position: absolute;
-      left: 50%;
-      top: 11%;
+      width: 16px;
       font-size: 9px;
       font-weight: 700;
+      line-height: 1;
       color: #fff;
-      transform-origin: 50% 86px;
-      margin-left: -8px;
-      width: 16px;
       text-align: center;
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
     }
     @media (prefers-reduced-motion: reduce) {
       .disc-wheel { transition: none; }
@@ -607,7 +606,7 @@
       <div class="brand-mark">BZ</div>
       <div>
         <div class="brand-name">Blue Zone</div>
-        <div class="brand-ver" id="appVersion">v0.3.2</div>
+        <div class="brand-ver" id="appVersion">v0.3.3</div>
       </div>
     </div>
     <div style="display:flex;gap:8px">
@@ -799,14 +798,14 @@
 
   <script>
   /**
-   * Blue Zone Parking — v0.3.2
+   * Blue Zone Parking — v0.3.3
    * Extensible client-side app. No backend. State in localStorage.
    * Security: no eval, no user HTML injection, API responses validated lightly.
    */
   (function () {
     "use strict";
 
-    const VERSION = "0.3.2";
+    const VERSION = "0.3.3";
     const STORAGE = {
       settings: "bz.settings.v1",
       session: "bz.session.v1",
@@ -1302,20 +1301,34 @@
     }
 
     // ─── Disc ticks (decorative) ───
+    function polar(radiusPct, degFromTop) {
+      const rad = (degFromTop - 90) * Math.PI / 180;
+      return {
+        left: (50 + radiusPct * Math.cos(rad)) + "%",
+        top: (50 + radiusPct * Math.sin(rad)) + "%",
+      };
+    }
+
     function buildDiscTicks() {
       const host = $("discTicks");
       host.innerHTML = "";
       for (let i = 0; i < 48; i++) {
         const t = document.createElement("div");
         t.className = "disc-tick" + (i % 2 === 0 ? " major" : "");
-        t.style.transform = "rotate(" + (i * 7.5) + "deg)";
+        const p = polar(46.5, i * 7.5);
+        t.style.left = p.left;
+        t.style.top = p.top;
+        t.style.transform = "translate(-50%, -50%) rotate(" + (i * 7.5) + "deg)";
         host.appendChild(t);
       }
       for (let h = 0; h < 24; h++) {
         const el = document.createElement("div");
         el.className = "disc-hour";
         el.textContent = String(h).padStart(2, "0");
-        el.style.transform = "rotate(" + (h * 15) + "deg)";
+        const p = polar(39.5, h * 15);
+        el.style.left = p.left;
+        el.style.top = p.top;
+        el.style.transform = "translate(-50%, -50%)";
         host.appendChild(el);
       }
     }

@@ -1,6 +1,6 @@
 # Blue Zone — changelog
 
-## Current version: 0.3.2 — 7 October 2026
+## Current version: 0.3.3 — 7 October 2026
 
 Parking-disc helper for Swiss Blue Zone rules.
 
@@ -27,6 +27,9 @@ Parking-disc helper for Swiss Blue Zone rules.
 ---
 
 ## History
+
+### 0.3.3 — 7 October 2026
+- Disc hour numbers sit on the ring, aligned with the ticks
 
 ### 0.3.2 — 7 October 2026
 - GitHub / GitLab Pages publish `index.html` at the site root

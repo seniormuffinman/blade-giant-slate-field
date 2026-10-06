@@ -4,6 +4,15 @@ import { timeLabelToDegrees } from "@/lib/blue-zone/time";
 
 type Size = "hero" | "tile";
 
+/** Point on the disc: 0° is 12 o'clock, clockwise. Radius is % of the disc. */
+function polar(radiusPct: number, degFromTop: number) {
+  const rad = ((degFromTop - 90) * Math.PI) / 180;
+  return {
+    left: `${50 + radiusPct * Math.cos(rad)}%`,
+    top: `${50 + radiusPct * Math.sin(rad)}%`,
+  };
+}
+
 export function ParkingDisc({
   timeLabel,
   animate = true,
@@ -53,27 +62,34 @@ export function ParkingDisc({
       <div className="bz-disc-body absolute inset-0 rounded-full" />
 
       {size === "hero" &&
-        ticks.map((i) => (
-          <span
-            key={`t-${i}`}
-            className={cn(
-              "bz-disc-tick absolute left-1/2 top-[5%] origin-[50%_900%]",
-              i % 2 === 0 ? "h-2.5 w-0.5 bg-white/80" : "h-1.5 w-px bg-white/40",
-            )}
-            style={{ transform: `translateX(-50%) rotate(${i * 7.5}deg)` }}
-          />
-        ))}
+        ticks.map((i) => {
+          const major = i % 2 === 0;
+          return (
+            <span
+              key={`t-${i}`}
+              className={cn(
+                "bz-disc-tick absolute",
+                major ? "h-2.5 w-0.5 bg-white/85" : "h-1.5 w-px bg-white/40",
+              )}
+              style={{
+                ...polar(46.5, i * 7.5),
+                transform: `translate(-50%, -50%) rotate(${i * 7.5}deg)`,
+              }}
+            />
+          );
+        })}
 
       {size === "hero" &&
         hours.map((h) => (
           <span
             key={h}
-            className="bz-disc-hour absolute left-1/2 top-[11%] origin-[50%_380%] text-[9px]"
-            style={{ transform: `translateX(-50%) rotate(${h * 15}deg)` }}
+            className="bz-disc-hour absolute w-4 text-center text-[9px] leading-none tabular-nums"
+            style={{
+              ...polar(39.5, h * 15),
+              transform: "translate(-50%, -50%)",
+            }}
           >
-            <span style={{ display: "inline-block", transform: `rotate(${-h * 15}deg)` }}>
-              {String(h).padStart(2, "0")}
-            </span>
+            {String(h).padStart(2, "0")}
           </span>
         ))}
 
