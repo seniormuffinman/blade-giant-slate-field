@@ -1,0 +1,39 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble static site
+        run: |
+          mkdir -p _site
+          cp artifacts/blue-zone-parking/index.html _site/index.html
+          cp artifacts/blue-zone-parking/index.html _site/404.html
+          cp artifacts/blue-zone-parking/manifest.webmanifest _site/manifest.webmanifest
+          cp artifacts/blue-zone-parking/sw.js _site/sw.js
+          cp -r artifacts/blue-zone-parking/icons _site/icons
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,4 +1,4 @@
-# GitLab Pages — publishes this folder so index.html is at the site root.
+# GitLab Pages — index.html must end up at the site root.
 pages:
   image: alpine:latest
   stage: deploy
@@ -9,6 +9,7 @@ pages:
     - cp manifest.webmanifest public/manifest.webmanifest
     - cp sw.js public/sw.js
     - cp -r icons public/icons
+    - touch public/.nojekyll
   artifacts:
     paths:
       - public
